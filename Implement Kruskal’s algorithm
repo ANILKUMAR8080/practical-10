@@ -1,0 +1,41 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct Edge {
+    int u, v, w;
+};
+bool cmp(Edge a, Edge b) {
+    return a.w < b.w;
+}
+int main() {
+    int n, e;
+    cout << "Enter vertices and edges: ";
+    cin >> n >> e;
+    Edge a[100];
+    cout << "Enter edges (u v weight):\n";
+    for (int i = 0; i < e; i++)
+        cin >> a[i].u >> a[i].v >> a[i].w;
+    sort(a, a + e, cmp);
+    int p[100];
+    for (int i = 0; i < n; i++)
+        p[i] = i;
+    int total = 0, count = 0;
+    cout << "MST edges:\n";
+    for (int i = 0; i < e && count < n - 1; i++) {
+        int x = a[i].u, y = a[i].v;
+        while (p[x] != x) x = p[x];
+        while (p[y] != y) y = p[y];
+        if (x != y) {
+            cout << a[i].u << " - " << a[i].v
+                 << " : " << a[i].w << "\n";
+            p[x] = y;
+            total += a[i].w;
+            count++;
+        }
+    }
+    if (count != n - 1)
+        cout << "Graph is not connected\n";
+    else
+        cout << "Total cost = " << total;
+    return 0;
+}
